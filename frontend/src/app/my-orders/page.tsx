@@ -84,7 +84,7 @@ export default function MyOrdersPage() {
           <h1 className="font-display font-bold text-3xl text-ink mb-1">
             Your orders
           </h1>
-          <p className="text-ink-muted">Track status, see what's ready.</p>
+          <p className="text-ink-muted">Track status, see what&apos;s ready.</p>
         </div>
         <Link
           href="/order"
