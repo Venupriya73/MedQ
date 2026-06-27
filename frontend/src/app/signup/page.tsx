@@ -11,6 +11,24 @@ interface Branch {
   city: string;
 }
 
+function getErrorMessage(err: unknown, fallback: string): string {
+  if (
+    err &&
+    typeof err === "object" &&
+    "response" in err &&
+    err.response &&
+    typeof err.response === "object" &&
+    "data" in err.response &&
+    err.response.data &&
+    typeof err.response.data === "object" &&
+    "message" in err.response.data &&
+    typeof err.response.data.message === "string"
+  ) {
+    return err.response.data.message;
+  }
+  return fallback;
+}
+
 export default function SignupPage() {
   const router = useRouter();
   const [role, setRole] = useState<"customer" | "staff">("customer");
@@ -48,8 +66,8 @@ export default function SignupPage() {
       saveSession(res.data.token, res.data.user);
 
       router.push(role === "staff" ? "/staff" : "/order");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Something went wrong. Try again.");
+    } catch (err) {
+      setError(getErrorMessage(err, "Something went wrong. Try again."));
     } finally {
       setLoading(false);
     }
@@ -84,7 +102,7 @@ export default function SignupPage() {
                   : "text-ink-muted hover:text-ink"
               }`}
             >
-              I'm a customer
+              I&apos;m a customer
             </button>
             <button
               type="button"
@@ -95,7 +113,7 @@ export default function SignupPage() {
                   : "text-ink-muted hover:text-ink"
               }`}
             >
-              I'm pharmacy staff
+              I&apos;m pharmacy staff
             </button>
           </div>
 

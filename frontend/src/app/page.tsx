@@ -52,7 +52,7 @@ export default function Home() {
                 href="/login?role=staff"
                 className="text-ink-muted hover:text-ink font-medium text-sm transition-colors"
               >
-                I'm pharmacy staff →
+                I&apos;m pharmacy staff →
               </Link>
             </div>
           </div>

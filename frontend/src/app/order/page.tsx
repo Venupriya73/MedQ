@@ -31,6 +31,24 @@ interface PlacedOrder {
   status: string;
 }
 
+function getErrorMessage(err: unknown, fallback: string): string {
+  if (
+    err &&
+    typeof err === "object" &&
+    "response" in err &&
+    err.response &&
+    typeof err.response === "object" &&
+    "data" in err.response &&
+    err.response.data &&
+    typeof err.response.data === "object" &&
+    "message" in err.response.data &&
+    typeof err.response.data.message === "string"
+  ) {
+    return err.response.data.message;
+  }
+  return fallback;
+}
+
 export default function OrderPage() {
   const { user, checked } = useAuthGuard("customer");
 
@@ -138,8 +156,8 @@ export default function OrderPage() {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setPlacedOrder(res.data);
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Could not place order. Try again.");
+    } catch (err) {
+      setError(getErrorMessage(err, "Could not place order. Try again."));
     } finally {
       setSubmitting(false);
     }
@@ -205,7 +223,7 @@ export default function OrderPage() {
             </div>
 
             <p className="text-center text-xs text-ink-faint">
-              We'll prep your order. Walk in and show this token at the counter.
+              We&apos;ll prep your order. Walk in and show this token at the counter.
             </p>
           </div>
 
@@ -370,6 +388,7 @@ export default function OrderPage() {
               </button>
             ) : (
               <div className="flex items-center gap-4 bg-surface border border-border rounded-xl p-3">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={prescriptionPreview}
                   alt="Prescription preview"

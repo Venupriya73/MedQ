@@ -21,8 +21,11 @@ export default function LoginPage() {
       saveSession(res.data.token, res.data.user);
 
       router.push(res.data.user.role === "staff" ? "/staff" : "/order");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Invalid email or password");
+    } catch (err) {
+      const message = err instanceof Error && "response" in err
+        ? (err as { response?: { data?: { message?: string } } }).response?.data?.message
+        : undefined;
+      setError(message || "Invalid email or password");
     } finally {
       setLoading(false);
     }
